@@ -486,7 +486,7 @@ def main(page: ft.Page):
             on_change=load_students_by_napr
         )
 
-        main_content = ft.Column([])
+        main_content = ft.Column([],scroll="auto", expand=True)
         global end
         main_view = ft.View(
             route="/main",
@@ -559,7 +559,7 @@ def main(page: ft.Page):
             data = mysql1()
             filtered_data = data.copy()
             current_page = 0
-            users_per_page = 10
+            users_per_page = 5
 
             search_options = ["Все", "ФИО", "Почта", "Дата рождения", "Направление", "Общий балл"]
             search_field = ft.TextField(label="Поиск", on_change=lambda e: update_table(0), width=400)
@@ -667,7 +667,7 @@ def main(page: ft.Page):
             data = mysql1()
             filtered_data = data.copy()
             current_page = 0
-            users_per_page = 10
+            users_per_page = 5
 
             search_options = ["Все", "Ученик", "Оценка", "Комментарий", "Дата", "Направление"]
             search_field = ft.TextField(label="Поиск", on_change=lambda e: update_table(0), width=400)
