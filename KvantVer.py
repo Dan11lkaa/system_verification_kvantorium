@@ -11,8 +11,7 @@ from email.mime.text import MIMEText
 conn = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='ВАШ ПАРОЛЬ СЛУЖБЫ MYSQL',
-    database='Kvantorium_database'
+    password='ВАШ ПАРОЛЬ СЛУЖБЫ MYSQL'
 )
 
 try:
@@ -44,7 +43,7 @@ try:
 except Error as e:
     print(f"Ошибка: {e}")
 
-print("Подключено к базе данных Kvantorium_database")
+print("Подключено к базе данных kvantorium_database")
 
 end=None
 def main(page: ft.Page):
@@ -792,7 +791,7 @@ def main(page: ft.Page):
                             conn.commit()
                             page.open(ft.SnackBar(ft.Text("Вы успешно зарегистрировались!")))
                             print("Данные успешно добавлены в базу данных.")
-                            go_to_login(e)
+                            page.go('/login')
                         except Error as e:
                             page.open(ft.SnackBar(ft.Text(f"Ошибка при добавлении в базу данных: {e}")))
                             print(f"Ошибка: {e}")
