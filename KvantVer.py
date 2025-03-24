@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 conn = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='t47941022',
+    password='ВАШ ПАРОЛЬ СЛУЖБЫ MYSQL',
     database='Kvantorium_database'
 )
 
