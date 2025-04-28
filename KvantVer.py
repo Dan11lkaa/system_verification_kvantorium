@@ -11,8 +11,7 @@ from email.mime.text import MIMEText
 conn = mysql.connector.connect(
     host='localhost',
     user='root',
-    password='t47941022',
-    database='Kvantorium_database'
+    password='Введите ваш пароль от службы mysql'
 )
 
 try:
@@ -44,9 +43,11 @@ try:
 except Error as e:
     print(f"Ошибка: {e}")
 
-print("Подключено к базе данных Kvantorium_database")
+print("Подключено к базе данных kvantorium_database")
 
-end=None
+teacher = {('daniilbagin258@gmail.com', 'k123') : 'Электроника'}
+
+end, ded = None, None
 def main(page: ft.Page):
     page.title = "Kvantorium"
     page.route = page.route
@@ -165,7 +166,7 @@ def main(page: ft.Page):
         page.go('/faq')
 
 
-    def create_main_page():
+    def create_main_page(param):
         napr_list = []
         students = []
         student_naprs = {}
@@ -478,15 +479,24 @@ def main(page: ft.Page):
 
             main_content.controls.append(student_table)
             page.update()
-
-        napr_dropdown = ft.Dropdown(
-            label="Выберите направление",
-            options=[ft.dropdown.Option("Все направления")] + [ft.dropdown.Option(napr) for napr in napr_list],
-            width=300,
-            value="Все направления",
-            on_change=load_students_by_napr
-        )
-
+        if param:
+            napr_dropdown = ft.Dropdown(
+                label="Ваше направление",
+                options=[ft.dropdown.Option(param)],
+                width=300,
+                value=param,
+                on_change=load_students_by_napr
+            )
+        else:
+            napr_dropdown = ft.Dropdown(
+                label="Выберите направление",
+                options=[ft.dropdown.Option("Все направления")] + [ft.dropdown.Option(napr) for napr in napr_list],
+                width=300,
+                value="Все направления",
+                on_change=load_students_by_napr
+            )
+        global ded
+        ded = None
         main_content = ft.Column([])
         global end
         main_view = ft.View(
@@ -560,7 +570,7 @@ def main(page: ft.Page):
             data = mysql1()
             filtered_data = data.copy()
             current_page = 0
-            users_per_page = 10
+            users_per_page = 15
 
             search_options = ["Все", "ФИО", "Почта", "Дата рождения", "Направление", "Общий балл"]
             search_field = ft.TextField(label="Поиск", on_change=lambda e: update_table(0), width=400)
@@ -668,7 +678,7 @@ def main(page: ft.Page):
             data = mysql1()
             filtered_data = data.copy()
             current_page = 0
-            users_per_page = 10
+            users_per_page = 15
 
             search_options = ["Все", "Ученик", "Оценка", "Комментарий", "Дата", "Направление"]
             search_field = ft.TextField(label="Поиск", on_change=lambda e: update_table(0), width=400)
@@ -792,7 +802,7 @@ def main(page: ft.Page):
                             conn.commit()
                             page.open(ft.SnackBar(ft.Text("Вы успешно зарегистрировались!")))
                             print("Данные успешно добавлены в базу данных.")
-                            go_to_login(e)
+                            page.go('/login')
                         except Error as e:
                             page.open(ft.SnackBar(ft.Text(f"Ошибка при добавлении в базу данных: {e}")))
                             print(f"Ошибка: {e}")
@@ -938,6 +948,12 @@ def main(page: ft.Page):
                     navigation(param=True)
                     go_to_main(e)
                     page.open(ft.SnackBar(ft.Text("Вы успешно авторизовались как администратор!")))
+                elif (user_login.value, user_pass.value) in teacher:
+                    print(teacher[(user_login.value, user_pass.value)])
+                    navigation(param=True)
+                    global ded
+                    ded = teacher[(user_login.value, user_pass.value)]
+                    go_to_main(e)
                 else:
                     page.open(ft.SnackBar(ft.Text("Неверный логин или пароль!")))
 
@@ -976,7 +992,7 @@ def main(page: ft.Page):
         page.views.append(
             create_login_page() if page.route == "/login" or page.route == "/"
             else create_register_page(e) if page.route == "/register"
-            else create_main_page() if page.route == "/main"
+            else create_main_page(ded) if page.route == "/main"
             else create_leaderboard_page() if page.route == "/leaderboard"
             else create_faq_page() if page.route == "/faq"
             else create_history_page() if page.route == "/history"
