@@ -876,7 +876,8 @@ def main(page: ft.Page):
                 password.value = ''
                 password_2.value = ''
                 page.update()
-
+        def login_reg(e):
+            page.go('/login')
         mail = ft.TextField(label='Почта', width=400, on_change=lambda e: prov(e, mail, fuo, date, napr, password, password_2, bin_register))
         fuo = ft.TextField(label='ФИО', width=400, on_change=lambda e: prov(e, mail, fuo, date, napr, password, password_2, bin_register))
         date = ft.TextField(label='Дата рождения. Формат DD-MM-YYYY', width=400, on_change=lambda e: prov(e, mail, fuo, date, napr, password, password_2, bin_register))
@@ -895,7 +896,7 @@ def main(page: ft.Page):
         password_2 = ft.TextField(label='Подтвердите пароль', width=400, on_change=lambda e: prov(e, mail, fuo, date, napr, password, password_2, bin_register), password=True)
 
         bin_register = ft.FilledButton(text='Получить код подтверждения', on_click=lambda e: send_code(e, mail, fuo, date, napr, password, password_2), disabled=True)
-
+        but = ft.OutlinedButton(text='Вернуться к авторизации', on_click=login_reg)
         return ft.View(
             route="/login",
             controls=[
@@ -909,7 +910,8 @@ def main(page: ft.Page):
                             napr,
                             password,
                             password_2,
-                            bin_register
+                            bin_register,
+                            but
                         ],
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER
